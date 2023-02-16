@@ -2,9 +2,11 @@
 """
     encrypt(plaintext::String) -> Dict{Int64,String}
 
-    Encrypt function turns a string of plaintext message into a string of encrypted message (must all be in uppercase)
-        Uses the build function 'DNAEncryptionKey' found in the "Factory.jl" file.
+    Encrypt function turns a string of plaintext message into a dictionary of Int64 matched with strings of DNA message in all uppercase.
 
+    The function counts each character in the plaintext to number to keep them in the same position. 
+    This matches the encrypted string for each character in their respective positions found in the keydict.
+    The function generates the encrypted message using the build function 'DNAEncryptionKey' found in the "Factory.jl" file.
     
 """
 function encrypt(plaintext::String)::Dict{Int64,String}
@@ -33,8 +35,10 @@ end
 """
     decrypt(encrypteddata::Dict{Int64,String}) -> String
 
-    Decrypt function turns a string of encrypted message into a string of plaintext message (must all be in uppercase)
-        Uses the build function 'DNAEncryptionKey' found in the "Factory.jl" file.
+    Decrypt function turns a dictionary of Int64 matched with strings of DNA message into a string of plaintext message in all uppercase.
+        The function inverses the dictionary to map the strings of DNA messgae to their corresponding character in the keydict.
+        The function generates the decrypted plaintext message using the build function 'DNAEncryptionKey' found in the "Factory.jl" file.
+
 """
 function decrypt(encrypteddata::Dict{Int64,String})::String
 
