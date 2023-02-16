@@ -1,7 +1,7 @@
 #include the code needed
 include("Include.jl")
 
-#Test text"
+#Test text
 plaintext = "Charizard is my favorite Pokemon."
 
 #run functions
