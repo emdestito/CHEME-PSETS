@@ -1,31 +1,42 @@
 
 function _recursive_compound_parser(q::Queue{Char}, characters::Array{Char,1}, numbers::Array{Int,1})
 
-   next_char = dequeue!(q)
+     
     if (isempty(q) == true)
         return nothing
-
-    else
-        if (isempty(q) == true)
-            #push!(characters, next_char)
-            push!(numbers, parse(Int,next_char))
-
-            else
-                next_char2 = dequeue!(q)
+    
+    
+        else
+            next_char = dequeue!(q)
+            if (isnumeric(next_char) == false)
+                push!(characters,next_char)
         
-            if (isnumeric(next_char2) == true)
-                n = string(next_char,next_char2)
-                N = parse(Int, n)
-                push!(numbers, N)
             else
-                push!(numbers,parse(Int,next_char))
-                push!(characters,next_char2)
+                 if (isempty(q) == true)
+                    push!(numbers, parse(Int,next_char))
+                 else
+                    next_char2 = dequeue!(q)
+                       
+                    if (isnumeric(next_char2) == true)
+                        n = string(next_char,next_char2)
+                        N = parse(Int, n)
+                        push!(numbers,N)
+                    else
+                        push!(numbers,parse(Int,next_char))
+                        push!(characters,next_char2)
+                    end
+                end
+    
+            
             end
-        end
         
-    end
-    _recursive_compound_parser(q, characters, numbers)
-end   
+        end
+    
+    
+    
+        _recursive_compound_parser(q, characters, numbers)
+    
+    end  
     
         
 """
