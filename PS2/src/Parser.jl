@@ -6,57 +6,63 @@ function _recursive_compound_parser(q::Queue{Char}, characters::Array{Char,1}, n
         return nothing
 
     else
-        next_char = dequeqe!(q)
-        if (isnumeric(next_char) == false)
-            push!(characters, next_char)
-        else
-            if (next_char = last(character_arr, 1) == true)
-                push!(characters, next_char)
-                map(next_char -> 1)
+        if (isempty(q) == true)
+            #push!(characters, next_char)
+            push!(numbers, parse(Int,next_char))
 
-            end
+            else
+                next_char2 = dequeue!(q)
         
-            if (isnumeric(next_char) == true)
-                push!(numbers, next_char)
+            if (isnumeric(next_char2) == true)
+                n = string(next_char,next_char2)
+                N = parse(Int, n)
+                push!(numbers, N)
+            else
+                push!(numbers,parse(Int,next_char))
+                push!(characters,next_char2)
             end
         end
-        _recursive_compound_parser(q, characters, numbers)
+        
     end
-end
-
+    _recursive_compound_parser(q, characters, numbers)
+end   
+    
+        
 """
-    recursive_compound_parser(compounds::Dict{String, MyChemicalCompoundModel}) -> Dict{String, MyChemicalCompoundModel}
+    recursive_compound_parser(compounds::Dict{String, MyChemicalCompoundModel})::Dict{String, MyChemicalCompoundModel}
 
 TODO: Describe what this function does, the args and what we expect it to return 
 """
 function recursive_compound_parser(compounds::Dict{String, MyChemicalCompoundModel})::Dict{String, MyChemicalCompoundModel}
-   for (name, formula) ∈ compounds
-    composition = Dict{Char,Int}()
-    q = Queue{Char}()
-    characters = Array{Char,1}()
-    numbers = Array{Int,1}()
-    character_arr = collect(compounds.formula)
-    counter = 0
+   
+    for (name, model) ∈ compounds
+        composition = Dict{Char,Int}()
+        q = Queue{Char}()
+        characters = Array{Char,1}()
+        numbers = Array{Int,1}()
+      
+    
+        character_arr = collect(model.formula)
+    #for (name, model) ∈ compounds  
         for c ∈ character_arr
             enqueue!(q, c)
         end
 
 
+        
         _recursive_compound_parser(q, characters, numbers)
 
-        for x ∈ characters
-            composition[x] = numbers[counter]
+        counter = 1
+         for X ∈ characters
+            composition[X] = numbers[counter]
             counter = counter + 1
         end
 
-        formula.composition = composition
+        model.composition = composition
     end
 
-    return composition
+    return compounds
 end
-
-
-
 
 
     

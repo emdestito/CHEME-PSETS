@@ -10,7 +10,6 @@ mutable struct MyChemicalCompoundModel <: AbstractChemicalCompoundModel
     # data -
     name::String
     formula::String
-    compund::String
     composition::Dict{Char,Int}
 
     # constuctor

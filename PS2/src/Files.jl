@@ -3,6 +3,7 @@
     read_compounds_file(path::String) -> Dict{String, MyChemicalCompoundModel}
 
 TODO: Describe what this function is doing, the args and the what is contained in the data that is returned.
+
 The read_compounds_file splits the lines that aren't comments into a dictionary with the name as keys and values of MyChemicalCompundModel.
 The lines are split around commas in the data file.
 """
@@ -33,9 +34,9 @@ function read_compounds_file(path::String)::Dict{String, MyChemicalCompoundModel
                 fields = split(line,",") 
                 name = string(fields[1])
                 formula = string(fields[2])
-                composition = Dict{Char, Int}()
+                composition = Dict{Char,Int}
              
-                model = build(MyChemicalCompundModel, name, formula, composition)
+                model = build(MyChemicalCompoundModel, name, formula)
 
                 compounds[name] = model
             end

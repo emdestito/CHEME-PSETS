@@ -7,7 +7,6 @@ const _PATH_TO_DATA = joinpath(_ROOT, "data")
 # TODO: Fill in any external requirements 
 using DataStructures
 
-    #no external packages needed.
 
 # load my codes -
 # TODO: Fill in the include statements with your files
