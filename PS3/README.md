@@ -6,7 +6,7 @@
 |      | Case 1 |Case 2  | Case 3|
 |------|--------|--------|-------|
 |det(A)|  1 | 1 | 1 |
-|diagonally dominant?| yes | yes | no |
+|diagonally dominant?| no | yes | no |
 |Jacobi solution?| yes | yes| yes |
 |Gauss-Seidel solution?| yes | yes | yes|
 |Jacobi error| 2.8 x 10^41 | 0 | 0 |

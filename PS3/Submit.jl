@@ -44,3 +44,35 @@ j_error_3 = norm(jacobi_3 - prod_inv_3)
 g_error_1 = norm(gauss_1 - prod_inv_1)
 g_error_2 = norm(gauss_2 - prod_inv_2)
 g_error_3 = norm(gauss_3 - prod_inv_3)
+
+#Test if each case is diagonally dominant
+function diagonally_dominant(A::Matrix)
+    m, n = size(A)
+    for i = 1:m
+        if abs(A[i,i]) ≤ sum(abs.(A[i,1:i-1])) + sum(abs.(A[i,i+1:n]))
+            return false
+        end
+    end
+    return true
+end
+
+#Case 1
+if diagonally_dominant(case_1.A)
+    println("Case_1 is diagonally dominant")
+else
+    println("Case_1 is not diagonally dominant")
+end
+
+#Case 2
+if diagonally_dominant(case_2.A)
+    println("Case_2 is diagonally dominant")
+else
+    println("Case_2 is not diagonally dominant")
+end
+
+#Case 3
+if diagonally_dominant(case_3.A)
+    println("Case_3 is diagonally dominant")
+else
+    println("Case_3 is not diagonally dominant")
+end
