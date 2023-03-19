@@ -1,6 +1,7 @@
 abstract type AbstractIterativeSolver end
 abstract type AbstractSystemModel end
 
+
 """
 JacobiIterationSolver is an immutable indicator type. 
 This type is used to indicate that we want to use the Jacobi iteration. 
@@ -8,12 +9,14 @@ This type is used to indicate that we want to use the Jacobi iteration.
 struct JacobiIterationSolver <: AbstractIterativeSolver
 end
 
+
 """
 GaussSeidelIterationSolver is an immutable indicator type. 
 This type indicates that we want to use the Gauss-Seidel iteration. 
 """
 struct GaussSeidelIterationSolver <: AbstractIterativeSolver
 end
+
 
 """
 MyChemicalDecayModel is a mutable type that holds information about the decay of compound A
