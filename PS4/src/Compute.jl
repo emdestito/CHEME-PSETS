@@ -10,8 +10,10 @@ function _mean(data::Array{Float64,1})::Float64
     # initialize -
     μ = 0.0;
     μ = mean(data)
+
+    #First try at implementing:
     #for x ∈ data
-        #μ = mean(sum[x])   # μ = (μ + x[i])/sum(data)
+        #μ = mean(sum[x])  
     #end
 
     # return -
@@ -29,7 +31,8 @@ function _std(data::Array{Float64,1})::Float64
     # initialize -
     σ = 0.0;
     σ = std(data)
-
+    
+    #First try at implementing:
     #for x ∈ data
        # σ = std(sum[x]) 
     #end 
