@@ -11,6 +11,6 @@ XS = standardize(X);
 # decompose using SVD -
 F = svd(transpose(XS));
 
-
+# How to reduce 32 dimensions to 2: (In "plotme-PC12.jl")
 #U = F.U 
 #Y = X *(U[:,1:2])
