@@ -11,3 +11,6 @@ XS = standardize(X);
 # decompose using SVD -
 F = svd(transpose(XS));
 
+
+#U = F.U 
+#Y = X *(U[:,1:2])
