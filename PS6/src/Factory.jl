@@ -1,5 +1,7 @@
 
 """
+    _build_stoichiometric_matrix(data::Dict{String,Any}) --> Array{Float64,2}
+
 Fill me in.
 """
 function _build_stoichiometric_matrix(data::Dict{String,Any})::Array{Float64,2}
@@ -12,13 +14,33 @@ function _build_stoichiometric_matrix(data::Dict{String,Any})::Array{Float64,2}
     S = Array{Float64,2}(undef, number_of_metabolites, number_of_reactions);
     
     # TODO: fill in the entries of the stochiometric matrix 
-    # ...
+    for i ∈ 1:number_of_metabolites
+        met_dict = list_of_metabolites[i]
+        x = met_dict["id"]
 
+        for j ∈ 1:number_of_reactions
+            rxn_dict = list_of_reactions[j]
+            rxn_met_dict = rxn_dict["metabolites"]
+            if haskey(rxn_met_dict, x) == true
+                value = rxn_met_dict[x]
+                S[i,j] = value
+
+            else haskey(rxn_met_dict, x) == false
+                S[i,j] = 0.0
+            
+            end
+
+
+        end
+
+    end
     # return -
     return S
 end
 
 """
+    _build_metabolite_id_array(data::Dict{String,Any}) --> Array{String,1}
+
 Fill me in.
 """
 function _build_metabolite_id_array(data::Dict{String,Any})::Array{String,1}
@@ -56,6 +78,8 @@ function _build_reaction_id_array(data::Dict{String,Any})::Array{String,1}
 end
 
 """
+    _build_bounds_array(data::Dict{String,Any}) --> Array{Float64,2}
+
 Fill me in.
 """
 function _build_bounds_array(data::Dict{String,Any})::Array{Float64,2}
@@ -79,6 +103,8 @@ function _build_bounds_array(data::Dict{String,Any})::Array{Float64,2}
 end
 
 """
+    build(type::Type{MyStoichiometricNetworkModel}, data::Dict{String,Any}) --> MyStoichiometricNetworkModel
+
 Fill me in
 """
 function build(type::Type{MyStoichiometricNetworkModel}, data::Dict{String,Any})::MyStoichiometricNetworkModel
