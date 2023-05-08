@@ -14,10 +14,7 @@ function _recursive_compound_parser(q::Queue{Char}, characters::Array{Char,1}, n
         if (isnumeric(next_char) == false)
             # If the character is not numeric, add it to the characters array
             push!(characters,next_char)
-            #if next_char was the last letter, we include a 1 as its corresponding number and end code
-            if (isempty(q) == true)
-               push!(numbers,1)
-            end
+        
         else
             # If the character is numeric, check if the queue is empty
             if (isempty(q) == true)
@@ -38,6 +35,8 @@ function _recursive_compound_parser(q::Queue{Char}, characters::Array{Char,1}, n
                     # Then add the second character to the characters array
                     push!(numbers,parse(Int,next_char))
                     push!(characters,next_char2)
+
+
                 end
             end
         end
@@ -45,6 +44,7 @@ function _recursive_compound_parser(q::Queue{Char}, characters::Array{Char,1}, n
     # Recursively call the function with the updated queue, characters and numbers arrays
     _recursive_compound_parser(q, characters, numbers)
 end 
+
 
 
 """
@@ -69,7 +69,7 @@ function recursive_compound_parser(compounds::Dict{String, MyChemicalCompoundMod
         q = Queue{Char}()
         characters = Array{Char,1}()
         numbers = Array{Int,1}()
-      
+
         # Convert the formula string to an array of characters
         character_arr = collect(model.formula)
         
@@ -105,6 +105,9 @@ end
 # This function should return the updated instances of the MyChemicalCompoundModel types holding the composition dictionary in the 
 # the composition field.
 
-  
 
+#--------------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------
+#----------------------------CHATGPT----------------------------------------------------------------------------------------------
 
+                   
