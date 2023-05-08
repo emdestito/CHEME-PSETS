@@ -1,4 +1,3 @@
-
 """
     read_compounds_file(path::String) -> Dict{String, MyChemicalCompoundModel}
 

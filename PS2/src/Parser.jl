@@ -1,113 +1,100 @@
-# This function takes in a queue of characters, an array of characters and an array of numbers as arguments
-function _recursive_compound_parser(q::Queue{Char}, characters::Array{Char,1}, numbers::Array{Int,1})
+"""
+    _recursive_compound_parser(q::Queue, atoms::Queue{Char}, numbers::Queue{Char}, result::Dict{Char,Int64})
 
-    # Check if queue is empty
-    if (isempty(q) == true)
-        return nothing
-
+This function recursively processes each character in the Queue `q`, which holds the compound molecular formula.
+The composition for each compound is put into the `result` dictionary where the keys are elements, the values are the number of elements of that type in the compound.
+"""
+function _recursive_compound_parser(q::Queue, atoms::Queue{Char}, numbers::Queue{Char}, result::Dict{Char,Int64})
     
-    # If queue is not empty
-    else
-        # Get the next character from the queue
-        next_char = dequeue!(q)
-        # Check if the character is numeric or not
-        if (isnumeric(next_char) == false)
-            # If the character is not numeric, add it to the characters array
-            push!(characters,next_char)
+    if (isempty(q) == true) # base case -
         
-        else
-            # If the character is numeric, check if the queue is empty
-            if (isempty(q) == true)
-                # If the queue is empty, parse the character as an integer and add it to the numbers array
-                push!(numbers, parse(Int,next_char))
-            else
-                # If the queue is not empty, get the next character from the queue
-                next_char2 = dequeue!(q)
-                # Check if the second character is numeric or not
-                if (isnumeric(next_char2) == true)
-                    # If the second character is also numeric, concatenate both characters as a string and parse it as an integer,
-                    # then add it to the numbers array
-                    n = string(next_char,next_char2)
-                    N = parse(Int, n)
-                    push!(numbers,N)
+        # This is the base case: we have processed all the characters in q
+
+        # If atoms and numbers have some stuff in them, then we have one final atom => count pair
+        if (isempty(atoms) == false && isempty(numbers) == false)
+            word = join(numbers)
+            if (isempty(word) == false)
+               key = dequeue!(atoms)
+               result[key] = parse(Int64,word)
+            end
+        elseif (isempty(atoms) == false && isempty(numbers) == true) # this case handles the dangling element case
+            key = dequeue!(atoms)
+            result[key] = 1
+        end
+        
+        return nothing
+    else
+        
+        # Recursive case: check the next char -
+        next_char = dequeue!(q)
+        if (isnumeric(next_char) == false)
+
+            # if we get here, then we have hit a letter, this means we should store that letter in the atoms queue
+            
+            # Check if the next character is an uppercase letter and the current atom queue is not empty
+            if (isuppercase(next_char) == true && isempty(atoms) == false)
+                # Add the current atom queue as a single atom to the result dictionary with a count of 1
+                key = dequeue!(atoms)
+                # If we have just one atom of this type, then the corresponding number is 1
+                if (isempty(numbers))
+                    result[key] = 1
                 else
-                    # If the second character is not numeric, parse the first character as an integer and add it to the numbers array
-                    # Then add the second character to the characters array
-                    push!(numbers,parse(Int,next_char))
-                    push!(characters,next_char2)
-
-
+                    result[key] = parse(Int64, join(numbers))
+                    # Empty out the numbers queue, because we may need it again
+                    empty!(numbers)
                 end
             end
+            
+            enqueue!(atoms, next_char)
+        else
+
+            # if we get here, next_char is a number, so enqueue next_char into the numbers queue
+            # Why? we are collecting all the next_char's that are numbers until we hit an element or hit the base case
+            # When we hit an element the characters in the numbers queue can be joined to make a number
+            enqueue!(numbers, next_char)
         end
+
+        # Process the next character in the queue
+        _recursive_compound_parser(q, atoms, numbers, result)
     end
-    # Recursively call the function with the updated queue, characters and numbers arrays
-    _recursive_compound_parser(q, characters, numbers)
-end 
-
-
-
-"""
-    recursive_compound_parser(compounds::Dict{String, MyChemicalCompoundModel})::Dict{String, MyChemicalCompoundModel}
-
-    This function takes in a dictionary of MyChemicalCompoundModel objects as an argument and parses their formulas to obtain
-    their compositions. It uses the _recursive_compound_parser function to parse each formula.
-
-    Args:
-    - compounds: A dictionary of MyChemicalCompoundModel objects with the compound name as the key and the model as the value.
-
-    Returns:
-    - A dictionary of MyChemicalCompoundModel objects with the compound name as the key and the updated model as the value.
-"""
-function recursive_compound_parser(compounds::Dict{String, MyChemicalCompoundModel})::Dict{String, MyChemicalCompoundModel}
-   
-    # Loop through each compound in the dictionary
-    for (name, model) ∈ compounds
-        # Create a dictionary to store the composition of the compound
-        composition = Dict{Char,Int}()
-        # Create a queue, and arrays to store characters and numbers
-        q = Queue{Char}()
-        characters = Array{Char,1}()
-        numbers = Array{Int,1}()
-
-        # Convert the formula string to an array of characters
-        character_arr = collect(model.formula)
-        
-        # Enqueue each character into the queue
-        for c ∈ character_arr
-            enqueue!(q, c)
-        end
-
-        # Call the recursive parser function to obtain the characters and numbers arrays
-        _recursive_compound_parser(q, characters, numbers)
-
-        # Add the characters and their corresponding numbers to the composition dictionary
-        counter = 1
-        for X ∈ characters
-            composition[X] = numbers[counter]
-            counter += 1
-        end
-
-        model.composition = composition
-    end
-    
-    return compounds
-
 end
+
+
+
+"""
+    recursive_compound_parser(compounds::Dict{String, MyChemicalCompoundModel}) -> Dict{String, MyChemicalCompoundModel}
+
+This function processes each compound in the `compounds` dictionary by calling the `_recursive_compound_parser` function.
+"""
+function recursive_compound_parser(compounds::Dict{String, MyChemicalCompoundModel})
+
+    # process each compound
+    for (_, model) ∈ compounds
     
-# TODO: Implement a function that computes a composition dictionary of type Dict{Char,Int} for each of the compounds in the compounds dictionary
-#
-# Composition dictionary:
-# The composition dictionary will hold the elements of the compounds as Chars 
-# The number of each element will be the value held in the composition dictionary
-# the parsering logic should be written in the _recursive_compound_parser function.
+        # initialize -
+        numbers = Queue{Char}()
+        atoms = Queue{Char}()
+        q = Queue{Char}()
+        result = Dict{Char,Int64}()
 
-# This function should return the updated instances of the MyChemicalCompoundModel types holding the composition dictionary in the 
-# the composition field.
+        # run this for a single compound -
+        compound_string = model.formula
+
+        # build the Queue q that we are going to parse -
+        character_arr = collect(compound_string)
+        for c ∈ character_arr
+            enqueue!(q, c);
+        end
+
+        # recursive descent -
+        _recursive_compound_parser(q, atoms, numbers, result);
+
+        # update the model -
+        model.composition = result;
+    end
+
+    # return the updated dictionary
+    return compounds
+end
 
 
-#--------------------------------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------------------------------
-#----------------------------CHATGPT----------------------------------------------------------------------------------------------
-
-                   
