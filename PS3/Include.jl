@@ -6,9 +6,6 @@ const _PATH_TO_SRC = joinpath(_ROOT, "src")
 using LinearAlgebra
 using IterativeSolvers
 
-using Plots
-using Colors
-
 # load my codes -
 # TODO: Fill in the include statements with your files
 include(joinpath(_PATH_TO_SRC, "Types.jl"))

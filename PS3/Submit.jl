@@ -1,12 +1,12 @@
 include("Include.jl")
 
-#number_of_steps = trunc(Int, 20/0.1)
+number_of_steps = trunc(Int, 20/0.1)
 
-case_1 = build(MyChemicalDecayModel, κ = 1.0, h = 0.1, N = 200, Cₒ = 10.0)
-case_2 = build(MyChemicalDecayModel, κ = 10.0, h = 0.1, N = 200, Cₒ = 10.0)
-case_3 = build(MyChemicalDecayModel, κ = 100.0, h = 0.1, N = 200, Cₒ = 10.0)
+case_1 = build(MyChemicalDecayModel, κ = 1.0, h = 0.1, N = number_of_steps, Cₒ = 10.0)
+case_2 = build(MyChemicalDecayModel, κ = 10.0, h = 0.1, N = number_of_steps, Cₒ = 10.0)
+case_3 = build(MyChemicalDecayModel, κ = 100.0, h = 0.1, N = number_of_steps, Cₒ = 10.0)
 
-z = zeros(Float64, 200)
+z = zeros(Float64, number_of_steps)
 
 #For case_1
 jacobi_1 = solve(JacobiIterationSolver(), case_1, z)
