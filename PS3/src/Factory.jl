@@ -30,7 +30,10 @@ function _build_system_matrix(N::Int64, κ::Float64, h::Float64)::Array{Float64,
             if (i == j)
                 A[i,j] = 1
             
-                A[i,j-1] = (κ*h-1)
+            elseif i == j - 1
+                A[i, j] = κ * h - 1
+                
+            
 
             else
                 A[i,j] = 0
