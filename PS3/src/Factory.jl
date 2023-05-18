@@ -5,10 +5,9 @@ Internal function that constructs the right-hand side vector for the chemical de
 """
 function _build_right_handside_vector(N::Int64, κ::Float64, h::Float64, Cₒ::Float64)::Array{Float64,1}
     x = zeros(N)
-
-    for j ∈ 2:N
-        x[j] = Cₒ-Cₒ*h*κ
-    end
+    #We relaized the for loop we prevously had here was making the solver run backwards (from 0 to 9).
+    x[1] = Cₒ-(Cₒ*h*κ)
+    
 
     return x
 end
@@ -24,16 +23,16 @@ function _build_system_matrix(N::Int64, κ::Float64, h::Float64)::Array{Float64,
 
     A[1,1] = 1.0
 
-
+    #Our elseif statment was making our solution become all zeros (we previously had elseif (i>j)).
     for i ∈ 2:N
         for j ∈ 2:N
             if (i == j)
                 A[i,j] = 1
             
-            elseif i == j - 1
-                A[i, j] = κ * h - 1
-                
-            
+            elseif (i > 1)
+                for j = i-1
+                    A[i,j] = (κ*h - 1)
+                end
 
             else
                 A[i,j] = 0
@@ -41,6 +40,7 @@ function _build_system_matrix(N::Int64, κ::Float64, h::Float64)::Array{Float64,
             end
         end
     end
+    
 
     return A
 

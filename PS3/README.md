@@ -12,5 +12,5 @@
 |diagonally dominant?| yes | yes | no |
 |Jacobi solution?| yes | yes| yes |
 |Gauss-Seidel solution?| yes | yes | yes|
-|Jacobi error| 0.008087929084420128 | 0.0 | 1.0358114700419124e176 |
-|Gauss-Seidel error| 1.3103109323540204e-12 | 0.0 | 1.0358114700419124e176 |
+|Jacobi error| 0.0019418091339737707 | 0.0 | 1.5860039873111112e175 |
+|Gauss-Seidel error| 4.414095178537968e-15 | 0.0 | 1.5860039873111112e175 |
